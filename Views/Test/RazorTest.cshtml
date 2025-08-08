@@ -1,0 +1,37 @@
+﻿﻿@{
+    ViewData["Title"] = "RazorTest";
+}
+
+<h1>TestController - RazorTest View</h1>
+
+@{
+    var num1 = 6;
+    var num2 = 11;
+    var sum = num1 + num2;
+}
+<p>Sum of 6 and 11: @sum</p>
+
+@{
+    var stringArray = new string[] { "Apple", "Banana", "Cherry" };
+}
+<ul>
+    @foreach (var item in stringArray)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+@{
+    var coordinates = new[]
+    {
+        new { x = 1, y = 1 },
+        new { x = 2, y = 2 },
+        new { x = 3, y = 3 }
+    };
+}
+<ul>
+    @foreach (var coord in coordinates)
+    {
+        <li>Coordinate: (@coord.x, @coord.y)</li>
+    }
+</ul>
