@@ -12,6 +12,30 @@
 
 <br/>
 <br/>
+<form method="post" asp-controller="Items" asp-action="Index" class="mb-3">
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            <label for="searchText" class="col-form-label">Item Search</label>
+        </div>
+        <div class="col">
+            <input type="text"
+                   id="searchText"
+                   name="searchText"
+                   class="form-control"
+                   maxlength="100"
+                   placeholder="Type here..."
+                   title="Search by item name. Max 100 chars." />
+        </div>
+    </div>
+
+    <div class="mt-2">
+        <input type="submit" class="btn btn-outline-primary" value="Submit" />
+        <a asp-action="Index" class="btn btn-outline-danger">Reset</a>
+    </div>
+</form>
+
+<br/>
+<br/>
 
 <div class="container"> 
     <div class="row row-cols-3 small">
