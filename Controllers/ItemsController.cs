@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AOWebApp.Data;
 using AOWebApp.Models;
+using AOWebApp.ViewModels;
+
 
 namespace AOWebApp.Controllers
 {
@@ -20,7 +22,7 @@ namespace AOWebApp.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index(string searchText, int? category)
+        public async Task<IActionResult> Index(ItemSearchViewModel vm)
         {
             #region CategoriesQuery
             var categories = await (from c in _context.ItemCategories
@@ -33,29 +35,28 @@ namespace AOWebApp.Controllers
                                     })
                                    .ToListAsync();
 
-            ViewBag.Categories = new SelectList(categories,
+            vm.CategoryList = new SelectList(categories,
                 nameof(ItemCategory.CategoryId),
                 nameof(ItemCategory.CategoryName),
-                category
+                vm.CategoryId
             );
             #endregion
 
             #region ItemQuery
-            ViewBag.searchText = searchText;
 
             var itemQuery = _context.Items
                 .Include(i => i.Category)
                 .OrderBy(i => i.ItemName)
                 .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchText))
+            if (!string.IsNullOrWhiteSpace(vm.SearchText))
             {
-                itemQuery = itemQuery.Where(i => i.ItemName.Contains(searchText));
+                itemQuery = itemQuery.Where(i => i.ItemName.Contains(vm.SearchText));
             }
 
-            if (category.HasValue)
+            if (vm.CategoryId.HasValue)
             {
-                int catId = category.Value;
+                int catId = vm.CategoryId.Value;
                 itemQuery = itemQuery.Where(i =>
                     i.CategoryId == catId 
                     || i.Category.ParentCategoryId == catId 
