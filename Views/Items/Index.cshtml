@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AOWebApp.Models.Item>
+﻿@model AOWebApp.ViewModels.ItemSearchViewModel
+
 
 @{
     ViewData["Title"] = "Shop Items";
@@ -18,17 +19,14 @@
             <label for="searchText" class="col-form-label">Item Search</label>
         </div>
         <div class="col">
-            <input type="text"
-                   id="searchText"
-                   name="searchText"
-                   value="@ViewBag.searchText"
+            <input asp-for="SearchText"
                    class="form-control"
                    maxlength="100"
                    placeholder="Type here..."
                    title="Search by item name. Max 100 chars." />
         </div>
         <div class="col-auto">
-            <select name="category" class="form-select" asp-items="ViewBag.Categories"
+            <select asp-for="CategoryId" class="form-select" asp-items="Model.CategoryList"
                     title="View items for a specific category">
                 <option value="">All Categories...</option>
             </select>
@@ -47,7 +45,7 @@
 
 <div class="container"> 
     <div class="row row-cols-3 small">
-        @foreach (var item in Model)
+        @foreach (var item in Model.ItemList)
         {
             <div class="col card container-sm" style="width: 18rem;">
                 <div class="card-body">
