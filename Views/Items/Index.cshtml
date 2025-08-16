@@ -27,6 +27,13 @@
                    placeholder="Type here..."
                    title="Search by item name. Max 100 chars." />
         </div>
+        <div class="col-auto">
+            <select name="category" class="form-select" asp-items="ViewBag.Categories"
+                    title="View items for a specific category">
+                <option value="">All Categories...</option>
+            </select>
+        </div>
+
     </div>
 
     <div class="mt-2">

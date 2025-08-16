@@ -20,16 +20,50 @@ namespace AOWebApp.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index(string searchText)
+        public async Task<IActionResult> Index(string searchText, int? category)
         {
+            #region CategoriesQuery
+            var categories = await (from c in _context.ItemCategories
+                                    where c.ParentCategoryId == null
+                                    orderby c.CategoryName ascending
+                                    select new 
+                                    { 
+                                        c.CategoryId, 
+                                        c.CategoryName 
+                                    })
+                                   .ToListAsync();
+
+            ViewBag.Categories = new SelectList(categories,
+                nameof(ItemCategory.CategoryId),
+                nameof(ItemCategory.CategoryName),
+                category
+            );
+            #endregion
+
+            #region ItemQuery
             ViewBag.searchText = searchText;
-            var amazonOrdersDbContext = _context.Items.Include(i => i.Category).OrderBy(i => i.ItemName).AsQueryable();
+
+            var itemQuery = _context.Items
+                .Include(i => i.Category)
+                .OrderBy(i => i.ItemName)
+                .AsQueryable();
+
             if (!string.IsNullOrWhiteSpace(searchText))
             {
-                amazonOrdersDbContext = amazonOrdersDbContext
-                    .Where(i => i.ItemName.Contains(searchText));
+                itemQuery = itemQuery.Where(i => i.ItemName.Contains(searchText));
             }
-            return View(await amazonOrdersDbContext.ToListAsync());
+
+            if (category.HasValue)
+            {
+                int catId = category.Value;
+                itemQuery = itemQuery.Where(i =>
+                    i.CategoryId == catId 
+                    || i.Category.ParentCategoryId == catId 
+                );
+            }
+            #endregion
+
+            return View(await itemQuery.ToListAsync());
         }
 
         // GET: Items/Details/5
