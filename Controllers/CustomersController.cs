@@ -22,7 +22,42 @@ namespace AOWebApp.Controllers
         // GET: Customers
         public async Task<IActionResult> Index(string SearchText, string Suburb)
         {
+            #region SuburbQuery
+            var SuburbList = _context.Addresses
+                .Select(a => a.Suburb)
+                .Distinct()
+                .OrderBy(a => a)
+                .ToList();
+
+            ViewBag.SuburbList = new SelectList(SuburbList, Suburb);
+            #endregion
+
+            #region CustomerQuery
             List<Customer> CustomerList = new List<Customer>();
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                var Query = _context.Customers
+                    .Include(c => c.Address)
+                    .Where(c => SearchText.Split().Length > 1
+                        ? c.FirstName.Equals(SearchText.Split()[0]) && c.LastName.Equals(SearchText.Split()[1])
+                        : c.FirstName.StartsWith(SearchText) || c.LastName.StartsWith(SearchText));
+
+                if (!string.IsNullOrEmpty(Suburb))
+                {
+                    Query = Query.Where(c => c.Address.Suburb == Suburb);
+                }
+
+                Query = Query.OrderBy(c => SearchText.Split().Length > 1
+                        ? c.FirstName.StartsWith(SearchText.Split()[0])
+                        : c.FirstName.StartsWith(SearchText))
+                    .ThenBy(c => SearchText.Split().Length > 1
+                        ? c.LastName.StartsWith(SearchText.Split()[1])
+                        : c.LastName.StartsWith(SearchText));
+
+                CustomerList = await Query.ToListAsync();
+            }
+            #endregion
+
             return View(CustomerList);
         }
 

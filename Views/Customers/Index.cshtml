@@ -7,24 +7,21 @@
 <h2 class="text text-center">Customers</h2>
 
 
-<form method="post" asp-controller="Customers" asp-action="Index" class="row mb-2">
-    <div class="row mb-3">
-        <div class="col-3">
-            <input type="text" name="searchText" value="@ViewBag.searchText" 
-            class="form-control" placeholder="Name Search" title="Search customers by Name" />
-        </div>
-        <div class="col-3">
-            <select name="Suburb" class="form-select" asp-items="ViewBag.Suburb">
-                <option value="">All Suburbs...</option>
-            </select>
-        </div>
-        <div class="col">
-            <button type="submit" class="btn btn-outline-primary">Search</button>
-            <a asp-action="Create" class="btn btn-outline-success">Create New</a>
-        </div>
+<form asp-action="Index" asp-controller="Customers" class="row form-group">
+    <div class="col-3">
+        <input type="text" name="SearchText" class="form-control" placeholder="Customer Name..." />
     </div>
-
+    <div class="col-3">
+        <select name="Suburb" class="form-control" asp-items="@ViewBag.SuburbList">
+            <option value="">All Suburbs...</option>
+        </select>
+    </div>
+    <div class="col">
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+        <a asp-action="Create" class="btn btn-outline-success">Create New</a>
+    </div>
 </form>
+
 
 <table class="table">
     <thead>
