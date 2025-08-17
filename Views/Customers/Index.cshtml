@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AOWebApp.Models.Customer>
+﻿@model AOWebApp.ViewModels.CustomerSearchViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -8,56 +8,62 @@
 
 
 <form asp-action="Index" asp-controller="Customers" class="row form-group">
-    <div class="col-3">
-        <input type="text" name="SearchText" class="form-control" placeholder="Customer Name..." />
+    <div class="row mb-3">
+        <div class="col-3">
+            <input type="text" asp-for="SearchText" class="form-control"
+                   placeholder="Name Search" title="Search customers by Name" />
+        </div>
+        <div class="col-3">
+            <select asp-for="Suburb" asp-items="Model.SuburbList" class="form-control">
+                <option value="">All Suburbs...</option>
+            </select>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+            <a asp-action="Create" class="btn btn-outline-success">Create New</a>
+        </div>
     </div>
-    <div class="col-3">
-        <select name="Suburb" class="form-control" asp-items="@ViewBag.SuburbList">
-            <option value="">All Suburbs...</option>
-        </select>
-    </div>
-    <div class="col">
-        <button type="submit" class="btn btn-outline-primary">Search</button>
-        <a asp-action="Create" class="btn btn-outline-success">Create New</a>
-    </div>
+
 </form>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContactNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (!string.IsNullOrWhiteSpace(Model.SearchText))
+{
+    <p class="font-weight-bold">Matching Records Returned: @Model.CustomerList.Count</p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ContactNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address.AddressId)
-                </td>
+                <th>@Html.DisplayNameFor(model => model.CustomerList[0].FullName)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerList[0].Email)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerList[0].ContactNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerList[0].Address)</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CustomerList)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ContactNumber)</td>
+                    <td>
+                        @if (item.Address != null)
+                        {
+                            @item.Address.AddressLine <br />
+                            <span>@item.Address.Suburb,</span>
+                            <span>@item.Address.Postcode</span>
+                            <span>[@item.Address.Region]</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info text-dark">
+        <h5>Customer Search</h5><hr />
+        <p>To begin a search you must enter the name of a customer...</p>
+    </div>
+}
 
