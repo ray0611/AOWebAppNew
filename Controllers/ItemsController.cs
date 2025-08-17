@@ -62,9 +62,20 @@ namespace AOWebApp.Controllers
                     || i.Category.ParentCategoryId == catId 
                 );
             }
+
+            vm.ItemList = await itemQuery
+                .Select(i => new ItemDetailViewModel
+                {
+                    TheItem = i,
+                    ReviewCount = (i.Reviews != null ? i.Reviews.Count() : 0),
+                    AverageRating = (i.Reviews != null && i.Reviews.Count() > 0
+                        ? i.Reviews.Select(r => r.Rating).Average()
+                        : 0)
+                })
+                .ToListAsync();
             #endregion
 
-            return View(await itemQuery.ToListAsync());
+            return View(vm);
         }
 
         // GET: Items/Details/5

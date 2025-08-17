@@ -1,5 +1,14 @@
 ﻿@model AOWebApp.ViewModels.ItemSearchViewModel
 
+@functions {
+    public string ShortText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return "";
+        text = text.Trim();
+        return text.Length > 100 ? text.Substring(0, 100) + "..." : text;
+    }
+}
+
 
 @{
     ViewData["Title"] = "Shop Items";
@@ -49,17 +58,26 @@
         {
             <div class="col card container-sm" style="width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title">@item.ItemName</h5>
+                    <h5 class="card-title">@item.TheItem.ItemName</h5>
                     <p class="card-text">
-                        @(item.ItemDescription.Length > 100
-                            ? item.ItemDescription.Substring(0, 100).Trim() + "..."
-                            : item.ItemDescription)
+                        Category: @item.TheItem.Category.CategoryName <br />
+                        Description: @ShortText(item.TheItem.ItemDescription)<br />
+                        Cost: @item.TheItem.ItemCost.ToString("C")<br />
+                        Rating:
+                        @if (item.ReviewCount > 0)
+                        {
+                            <span>@item.AverageRating across @item.ReviewCount Reviews</span>
+                        }
+                        else
+                        {
+                            <span>This item has not been reviewed</span>
+                        }
                     </p>
-                    <p class="card-text">Cost: @item.ItemCost.ToString("C")</p>
-                    <img src="@item.ItemImage" class="card-img-bottom" alt="@item.ItemName">
+
+                    <img src="@item.TheItem.ItemImage" class="card-img-bottom" alt="@item.TheItem.ItemName">
                     <br />
                     <br />
-                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.ItemId"
+                    <a asp-controller="Items" asp-action="Details" asp-route-id="@item.TheItem.ItemId"
                        class="btn btn-outline-primary">
                         View Item Detail
                     </a>

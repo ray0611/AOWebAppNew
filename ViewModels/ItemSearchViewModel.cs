@@ -8,7 +8,7 @@ namespace AOWebApp.ViewModels
         public string SearchText { get; set; }
         public int? CategoryId { get; set; }
         public SelectList? CategoryList { get; set; }
-        public List<Item> ItemList { get; set; } = new();
+        public List<ItemDetailViewModel> ItemList { get; set; } = new();
 
     }
 }
