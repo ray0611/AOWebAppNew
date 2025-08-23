@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test APIs</title>
+</head>
+<body>
+    <h3>Category List</h3>
+    <ul id="categoryList"></ul>
+
+    <h3>Item List</h3>
+    <ul id="itemList"></ul>
+
+    <script>
+        fetch("/api/ParentCategoriesWebAPI")
+            .then(response => response.json())
+            .then(data => {
+                const categoryUl = document.querySelector("#categoryList");
+                data.forEach(category => {
+                    let li = document.createElement("li"); 
+                    li.innerText = category.categoryName;  
+                    categoryUl.appendChild(li);
+                });
+            })
+
+        fetch("/api/ItemsWebAPI")
+            .then(response => response.json())
+            .then(data => {
+                const itemUl = document.querySelector("#itemList");
+                data.forEach(item => {
+                    let li = document.createElement("li");
+                    li.innerText = item.itemName;
+                    itemUl.appendChild(li);
+                });
+            })
+    </script>
+</body>
+</html>
