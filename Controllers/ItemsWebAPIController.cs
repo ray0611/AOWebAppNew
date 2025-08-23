@@ -23,9 +23,21 @@ namespace AOWebApp.Controllers
 
         // GET: api/ItemsWebAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems(string? SearchText, int? CategoryID)
         {
-            return await _context.Items.ToListAsync();
+            var query = _context.Items
+                .OrderBy(i => i.ItemName)
+                .AsQueryable();
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                query = query.Where(i => i.ItemName.Contains(SearchText));
+            }
+
+            if (CategoryID.HasValue)
+            {
+                query = query.Where(i => i.Category.ParentCategoryId == CategoryID);
+            }
+            return await query.ToListAsync();
         }
 
         // GET: api/ItemsWebAPI/5
