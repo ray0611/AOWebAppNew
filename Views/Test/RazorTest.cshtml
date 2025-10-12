@@ -35,3 +35,20 @@
         <li>Coordinate: (@coord.x, @coord.y)</li>
     }
 </ul>
+
+@{
+    var students = new[]
+    {
+        new { Name = "Alice", Score = 92 },
+        new { Name = "Bob", Score = 78 },
+        new { Name = "Charlie", Score = 60 },
+        new { Name = "Diana", Score = 45 }
+    };
+}
+
+<ul>
+    @foreach (var s in students)
+    {
+        <li>@s.Name : @s.Score 分 — @(s.Score >= 60 ? "PASS" : "FAIL")</li>
+    }
+</ul>
