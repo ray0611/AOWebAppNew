@@ -3,6 +3,8 @@ import Card from './components/Card'
 import CardV2 from './components/CardV2'
 import CardV3 from './components/CardV3'
 import CardList from './components/CardList'
+import CardListNew from './components/CardListNew'
+import CardListSearch from './components/CardListSearch'
 
 
 function App() {
@@ -30,7 +32,7 @@ function App() {
                     itemImage="https://upload.wikimedia.org/wikipedia/commons/0/04/So_happy_smiling_cat.jpg"
                     itemCost='5.00'
                 />
-                <CardList></CardList>
+                <CardListSearch></CardListSearch>
 
 
             </div>

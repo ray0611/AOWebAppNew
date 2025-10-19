@@ -23,6 +23,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCors(b =>
+{
+    b.AllowAnyMethod();
+    b.AllowAnyOrigin();
+    b.AllowAnyHeader();
+}
+);
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
