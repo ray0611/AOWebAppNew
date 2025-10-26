@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CardListSearch from './components/CardListSearch';
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
+import CardDetail from './components/CardDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +21,7 @@ root.render(
                 <Route path="Products" element={<CardListSearch />} />
                 <Route path="" element={<Home />} /> 
                 <Route path="*" element={<Home />} />
+                <Route path="Products/:itemId" element={<CardDetail />} />
             </Routes>
         </BrowserRouter>
   </React.StrictMode>
