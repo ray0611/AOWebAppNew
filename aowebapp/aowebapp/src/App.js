@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import CardList from './components/CardListSearch';
 
 function App() {
@@ -19,6 +19,7 @@ return (
                 </div>
             </div>
         </nav>
+        <Outlet /> 
     </div>
 );
 }
