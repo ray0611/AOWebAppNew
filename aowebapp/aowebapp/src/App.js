@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import CardList from './components/CardListSearch';
+import './App.css';
 
 function App() {
 return (

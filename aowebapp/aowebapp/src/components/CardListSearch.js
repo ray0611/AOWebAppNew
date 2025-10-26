@@ -1,15 +1,14 @@
-﻿import React, { useState } from 'react'
-import CardV3 from './CardV3';
-//import cardData from "../assets/itemData.json"
+﻿import CardV3 from "./CardV3"
+import { useEffect, useState } from 'react'
 
 function CardListSearch() {
 
     const [cardData, setState] = useState([]);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState([]);
 
-    React.useEffect(() => {
-        console.log("useEffect");
-        fetch(`http://localhost:5226/api/ItemsWebAPI?SearchText=${query}`)
+    useEffect(() => {
+        console.log("Component Load useEffect()")
+        fetch(`http://localhost:5210/api/ItemsWebAPI?searchText=${query}`)
             .then(response => response.json())
             .then(data => setState(data))
             .catch(err => {
@@ -19,21 +18,29 @@ function CardListSearch() {
 
     function searchQuery(evt) {
 
-        const value = document.querySelector('[name="searchText"]').value;
-        //alert('value: ' + value);
+        const value = evt.target.value;
+        //const value = document.querySelector('[name="searchText"]').value;
         setQuery(value);
+    }
+    function onSubmit(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        console.log("FormData: " + formData.get("searchText"))
+        setQuery(formData.get("searchText"))
     }
 
     return (
-        <div id="cardListSearch">
-            <div className="row justify-content-start mb-3">
+        <div className="cardListSearch">
+            <form method="post" onSubmit={onSubmit} className="row justify-content-start mb-3">
                 <div className="col-3">
-                    <input type="text" name="searchText" className="form-control" placeholder="Type your query" />
+                    <input type="text" name="searchText" className="form-control" />
                 </div>
-                <div className="col text-left">
-                    <button type="button" className="btn btn-primary" onClick={searchQuery}>Search</button>
+                <div className="col-3 text-left">
+                    <button type="submit" value={searchQuery}>Search</button>
                 </div>
-            </div>
+            </form>
             <div id="cardList" className="card-list">
                 {cardData.map((obj) => (
                     <CardV3
@@ -47,8 +54,8 @@ function CardListSearch() {
                 ))}
             </div>
         </div>
-    );
+    )
 }
 
-export default CardListSearch;
+export default CardListSearch
 
