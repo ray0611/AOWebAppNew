@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
+import * as d3 from "d3";
 export default function Graph() {
     const [rngNumber, setRngNumber] = useState(0);
     const [rngArray, setRngArray] = useState([]);
@@ -22,6 +23,37 @@ export default function Graph() {
         setRngArray(tempArray);
         // console.log(rngArray);
     }, [rngNumber]);
+
+    useEffect(() => {
+        const svg = d3.select("svg");
+        svg.selectAll("*").remove();
+
+        let w = svg.node().getBoundingClientRect().width;
+        let h = svg.node().getBoundingClientRect().height;
+        const barMargin = 10;
+        const barWidth = w / rngArray.length;
+
+        let yScale = d3.scaleLinear()
+            .domain([0, maxValue])
+            .range([h, 0]);
+
+        let barGroups = svg.selectAll("g")
+            .data(rngArray);
+
+        let newBarGroups = barGroups.enter()
+            .append("g")
+            .attr("transform", (d, i) => {
+                return `translate(${i * barWidth}, ${yScale(d)})`;
+            });
+
+        newBarGroups
+            .append("rect")
+            .attr("x", 0)
+            .attr("height", d => { return h - yScale(d); })
+            .attr("width", barWidth - barMargin)
+            .attr("fill", "black");
+    }, [rngArray]);
+
 
     return (
         <div className="App container">
