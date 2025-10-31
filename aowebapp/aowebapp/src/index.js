@@ -7,25 +7,27 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CardListSearch from './components/CardListSearch';
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
+import Graph from "./routes/Graph";
 import CardDetail from './components/CardDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+    <React.StrictMode>
         <BrowserRouter>
-            <App />
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<App />} />
                 <Route path="Home" element={<Home />} />
                 <Route path="Contact" element={<Contact />} />
+                <Route path="Graph" element={<Graph />} />
                 <Route path="Products" element={<CardListSearch />} />
-                <Route path="" element={<Home />} /> 
+                <Route path="" element={<Home />} />
                 <Route path="*" element={<Home />} />
                 <Route path="Products/:itemId" element={<CardDetail />} />
             </Routes>
         </BrowserRouter>
-  </React.StrictMode>
+    </React.StrictMode>
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
