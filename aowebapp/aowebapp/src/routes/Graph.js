@@ -3,13 +3,16 @@ import * as d3 from "d3";
 export default function Graph() {
     const [rngNumber, setRngNumber] = useState(0);
     const [rngArray, setRngArray] = useState([]);
-    const maxItems = 20;
-    const timeOut = 500;
-    const maxValue = 60;
+    const maxItems = 50;
+    const timeOut = 100;
+    const maxValue = 1;
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setRngNumber(Math.floor(Math.random() * maxValue));
+            let val = Math.random();
+            setRngNumber(
+                `3/8 -> 7/16: note:d4 s:supersaw cutoff:300 attack:0 decay:0 sustain:0.5 release:0.1 room:0.6 lpenv:3.3 gain:${val} duration:0.10714285714285714 background-color: black; color:white; border-radius:15px`
+            );
         }, timeOut);
 
         return () => clearInterval(interval);
@@ -23,6 +26,19 @@ export default function Graph() {
         setRngArray(tempArray);
         // console.log(rngArray);
     }, [rngNumber]);
+
+    function LogToNum(input) {
+        if (!input) return 0;
+        var stringArray = input.split(/(\s+)/);
+        for (const item of stringArray) {
+            if (item.startsWith("gain:")) {
+                let val = item.substring(5);
+                return Number(val);
+            }
+        }
+        return 0;
+    }
+
 
     useEffect(() => {
         const svg = d3.select("svg");
@@ -97,7 +113,7 @@ export default function Graph() {
 
         chartGroup
             .append("path")
-            .datum(rngArray)
+            .datum(rngArray.map((d) => LogToNum(d)))
             .attr("fill", "none")
             .attr("stroke", "url(#line-gradient)")
             .attr("stroke-width", 1.5)
