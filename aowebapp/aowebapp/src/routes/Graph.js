@@ -49,7 +49,7 @@ export default function Graph() {
         let h = svg.node().getBoundingClientRect().height;
         h = h - 25;
         const barMargin = 10;
-        const barWidth = w / rngArray.length;
+        const barWidth = w / maxItems;
 
         // Create yScale
         let yScale = d3
