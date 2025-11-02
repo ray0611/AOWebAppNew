@@ -47,32 +47,67 @@ export default function Graph() {
             .classed("chartGroup", true)
             .attr("transform", "translate(30,3)");
 
-        let barGroups = chartGroup.selectAll("g").data(rngArray);
+    //    let barGroups = chartGroup.selectAll("g").data(rngArray);
 
-        // Add groups
-        let newBarGroups = barGroups
-            .enter()
-            .append("g")
-            .attr("transform", (d, i) => {
-                return `translate(${i * barWidth}, ${yScale(d)})`;
-            });
+    //    // Add groups
+    //    let newBarGroups = barGroups
+    //        .enter()
+    //        .append("g")
+    //        .attr("transform", (d, i) => {
+    //            return `translate(${i * barWidth}, ${yScale(d)})`;
+    //        });
 
-        // Draw me some rectangles
-        newBarGroups
-            .append("rect")
-            .attr("x", 0)
-            .attr("height", (d) => {
-                return h - yScale(d);
-            })
-            .attr("width", barWidth - barMargin)
-            .attr("fill", "black");
+    //    // Draw me some rectangles
+    //    newBarGroups
+    //        .append("rect")
+    //        .attr("x", 0)
+    //        .attr("height", (d) => {
+    //            return h - yScale(d);
+    //        })
+    //        .attr("width", barWidth - barMargin)
+    //        .attr("fill", "black");
 
-        // Add yAxis to chartGroup
+    //    // Add yAxis to chartGroup
+    //    let yAxis = d3.axisLeft(yScale);
+    //    chartGroup
+    //        .append("g")
+    //        .classed("axis y", true)
+    //        .call(yAxis);
+        //}, [rngArray]);
+
         let yAxis = d3.axisLeft(yScale);
+        chartGroup.append("g").classed("axis y", true).call(yAxis);
         chartGroup
-            .append("g")
-            .classed("axis y", true)
-            .call(yAxis);
+            .append("linearGradient")
+            .attr("id", "line-gradient")
+            .attr("gradientUnits", "userSpaceOnUse")
+            .attr("x1", 0)
+            .attr("y1", yScale(0))
+            .attr("x2", 0)
+            .attr("y2", yScale(maxValue))
+            .selectAll("stop")
+            .data([
+                { offset: "0%", color: "green" },
+                { offset: "100%", color: "red" },
+            ])
+            .enter()
+            .append("stop")
+            .attr("offset", (d) => d.offset)
+            .attr("stop-color", (d) => d.color);
+
+        chartGroup
+            .append("path")
+            .datum(rngArray)
+            .attr("fill", "none")
+            .attr("stroke", "url(#line-gradient)")
+            .attr("stroke-width", 1.5)
+            .attr(
+                "d",
+                d3
+                    .line()
+                    .x((d, i) => i * barWidth)
+                    .y((d) => yScale(d))
+            );
     }, [rngArray]);
 
     return (
